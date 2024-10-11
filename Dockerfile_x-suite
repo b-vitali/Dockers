@@ -1,0 +1,56 @@
+# Use the official Ubuntu image
+FROM ubuntu:22.04
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install required packages
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    python3-dev \
+    python3-tk \
+    x11-apps \
+    git \
+    epiphany-browser \
+    && pip3 install matplotlib \
+    && pip3 install jupyter \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Let's make 'myjupyter' command to take care of the flags
+RUN echo "alias myjupyter='jupyter notebook --ip=0.0.0.0 --no-browser --allow-root --NotebookApp.token='" >> ~/.bashrc
+
+# Install Xsuite
+RUN pip3 install xsuite
+
+# Install optional dependencies
+# MAD-X and cpymad
+RUN pip3 install cpymad
+
+# Sixtracktools
+RUN git clone https://github.com/sixtrack/sixtracktools /opt/sixtracktools && \
+    pip3 install -e /opt/sixtracktools
+
+# PyHEADTAIL
+RUN git clone https://github.com/pycomplete/pyheadtail /opt/pyheadtail && \
+    pip3 install cython h5py && \
+    pip3 install -e /opt/pyheadtail
+
+# Other useful packages
+RUN pip3 install tqdm cython xplt jupyter ipympl ipython
+
+# Set the display environment variable
+ENV DISPLAY=:0
+
+# Change the command prompt
+RUN echo 'export PS1="\[\e[4;33m\]x-suite:\[\e[36m\]\w\[\e[0m\]$ "' >> /root/.bashrc
+
+# Expose the Jupyter Notebook port
+EXPOSE 8888
+
+# Set the working directory (optional, if your work is in /mnt/x-suite)
+WORKDIR /mnt/x-suite
+
+# Start a shell
+CMD ["/bin/bash"]
+
