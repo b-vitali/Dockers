@@ -1,18 +1,24 @@
 # My Dockerfile(s)
 This is just a handy collection of dockerfiles to create some dockers or useful dockerhubs
 
-1. [Setup](#setup)
+## Table of content
+- [Setup](#setup)
     - [X11](#x11)
     - [Useful Commands](#useful-commands)
-4. [X-Suite](#x-suite)
-    - [Build and Use](#build-and-use)
-5. [CERN ROOT](#cern-root)
-    - [Pull and Run](#pull-and-run)
-6. [G4bl and GEANT4 (Coming Soon)](#g4bl-and-geant4-coming-soon)
+- [X-Suite](#x-suite)
+- [CERN ROOT](#cern-root)
+- [Manim+ManimSlides](Manim+ManimSlides)
+- [G4bl and GEANT4 (Coming Soon)](#g4bl-and-geant4-coming-soon)
 
 
 ## Setup
 This is **not** a guide, just some note for my future reference.
+
+
+<details>
+<summary>Click here to find out more!</summary>
+
+### Preparations
 
 Make sure you are up to date and add the necessary tools
 ```
@@ -41,6 +47,7 @@ sudo nano /etc/apt/sources.list.d/docker.list
 deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu jammy stable 
 ```
 
+### Install
 Finally I can install and check if it runs 
 ```
 sudo apt update 
@@ -54,13 +61,20 @@ sudo docker run hello-world
 If you want to have plots and graphs you need to have X11 forwarding.
 On your side run ```xhost +local``` and remember ```--volume /tmp/.X11-unix:/tmp/.X11-unix``` when running docker
 
-### Useful commands
-You can find all the usual stuff running ```docker -h``` but here are some important thigs:
+</details>
 
-Info on the memory usage of the different images/containers ```docker system df```
-Info on the images ```docker images -a ```
-Info on the containers ```docker container```  
-To remove stuff there are: ```docker prune``` ```docker rmi <imageID>``` ```docker rm  <containerID>``` 
+
+> [!TIP]
+> ### Useful Commands
+> You can find all the usual stuff running `docker -h`, but here are some important things:
+>
+> - Info on the memory usage of the different images/containers: `docker system df`
+> - Info on the images: `docker images -a`
+> - Info on the containers: `docker container ls`
+> - To remove stuff there are:
+>   - `docker system prune`
+>   - `docker rmi <imageID>`
+>   - `docker rm <containerID>`
 
 
 ## X-Suite
@@ -70,9 +84,12 @@ As described on [x-suite website](https://xsuite.readthedocs.io/en/latest/):
 This docker has some minimal tweeking to have a functioning jupyter notebook and other small things.
 Most of the requirements for additional tools (MAD-X, Sixtracktools, PyHEADTAIL, ...) are already installed.
 
-### Build and use
+
+<details>
+<summary>Build and use</summary>
+
 Standard build specifying the dockerfile name
-```docker build -t Dockerfile_x-suite xsuite-docker .```
+```docker build -t xsuite-docker -f x-suite_Dockerfile . ```
 
 To run it and having your browser access *jupyter* and the popup *plots* we have some flag to add
 ```
@@ -85,12 +102,49 @@ docker run -it --rm \
     xsuite-docker
 ``` 
 
+If you want to run X-Suite via python you just import it and run `python3 MyFile.py`
+
 To run jupyter just run ``` myjupyter ``` then open your browser and go to ```http://127.0.0.1:8888/tree/mnt/x-suite```
+
+</details>
+
+
+## Manim + ManimSlides
+
+This Docker is not small because it comes with python, manim, manim slides and latex.
+Is everything necessary? I don't know yet and I will update it when I will figure it out!
+
+
+<details>
+<summary>Build and use</summary>
+
+Standard build specifying the dockerfile name
+```docker build -t manim-docker -f manim_Dockerfile . ```
+
+To then run the image is always the same stuff:
+```
+docker run -it --rm \
+    --name manim \
+    -p 8888:8888 \
+    --env DISPLAY=$DISPLAY \
+    --volume /tmp/.X11-unix:/tmp/.X11-unix \
+    --volume /home/bastiano/Software/manim-docker:/mnt/manim \
+    manim-docker
+``` 
+
+To use this python package you call `manim [OPTIONS] MyFile.py`
+
+If you want to make a `Slides.html` you can run
+`manim-slide render MyFile.py Presentation` and then `manim-slide converter Presentation Slides.html`
+
+</details>
 
 ## CERN ROOT
 Instead of creating it from scratch, root can be downloaded directly
 
-### Pull and run
+<details>
+<summary>Pull and run</summary>
+
 Just like a git repo, simply *pull* the latest version
 ```docker pull rootproject/root```
 
@@ -104,5 +158,7 @@ docker run –it --rm \
     --user $(id -u):$(id -g)   
     rootproject/root /bin/bash 
 ```
+</details>
+
 
 ### G4bl and GEANT4 (Coming Soon)

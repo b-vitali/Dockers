@@ -1,0 +1,71 @@
+# Use Ubuntu 22.04 as the base image
+FROM ubuntu:22.04
+
+# Install required system packages
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    python3 \
+    python3-pip \
+    python3-setuptools \
+    python3-venv \
+    curl \
+    x11-apps
+
+# Set the DEBIAN_FRONTEND to noninteractive for texlive installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get install -y texlive-full
+
+# Reset the DEBIAN_FRONTEND variable to allow interactive prompts for future installations
+ENV DEBIAN_FRONTEND=dialog
+
+RUN apt-get install -y \
+    git \
+    ffmpeg \
+    libcairo2-dev \
+    pkg-config \
+    libpango1.0-dev \
+    libgirepository1.0-dev \
+    python3-gi \
+    python3-gi-cairo \
+    gobject-introspection \
+    libglib2.0-dev \
+    xdg-utils
+
+# Upgrade Meson to version 0.63.3 or newer
+RUN pip3 install --upgrade meson
+
+# Install manim using pip
+RUN pip3 install manim
+
+# Install manim-slides using pip
+RUN pip install manim-slides
+
+# Set the display environment variable
+ENV DISPLAY=:0
+
+# Add the user and group IDs dynamically (replace with your user ID if necessary)
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+RUN groupadd --gid ${GROUP_ID} usergroup \
+    && useradd --uid ${USER_ID} --gid ${GROUP_ID} -m user \
+    && echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Switch to the new user
+USER user
+
+# Set the custom prompt for the 'user' account
+RUN echo 'export PS1="\[\e[4;33m\]manim:\[\e[36m\]\w\[\e[0m\]$ "' >> /home/user/.bashrc
+
+# Set the terminal title automatically when starting a shell
+RUN echo 'echo -ne "\033]0;Manim\007"' >> /home/user/.bashrc
+
+# Expose the Jupyter Notebook port
+EXPOSE 8888
+
+# Set the working directory (optional, if your work is in /mnt/x-suite)
+WORKDIR /mnt/manim
+
+# Start a shell
+CMD ["/bin/bash"]

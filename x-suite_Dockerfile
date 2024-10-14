@@ -42,8 +42,22 @@ RUN pip3 install tqdm cython xplt jupyter ipympl ipython
 # Set the display environment variable
 ENV DISPLAY=:0
 
-# Change the command prompt
-RUN echo 'export PS1="\[\e[4;33m\]x-suite:\[\e[36m\]\w\[\e[0m\]$ "' >> /root/.bashrc
+# Add the user and group IDs dynamically (replace with your user ID if necessary)
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+RUN groupadd --gid ${GROUP_ID} usergroup \
+    && useradd --uid ${USER_ID} --gid ${GROUP_ID} -m user \
+    && echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Switch to the new user
+USER user
+
+# Set the custom prompt for the 'user' account
+RUN echo 'export PS1="\[\e[4;33m\]x-suite:\[\e[36m\]\w\[\e[0m\]$ "' >> /home/user/.bashrc
+
+# Set the terminal title automatically when starting a shell
+RUN echo 'echo -ne "\033]0;X-Suite\007"' >> /home/user/.bashrc
 
 # Expose the Jupyter Notebook port
 EXPOSE 8888
