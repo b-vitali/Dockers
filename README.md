@@ -1,22 +1,19 @@
-# My Dockerfile(s)
+# My Dockers
 This is just a handy collection of dockerfiles to create some dockers or useful dockerhubs
 
 ## Table of content
 - [Setup](#setup)
-    - [X11](#x11)
-    - [Useful Commands](#useful-commands)
 - [X-Suite](#x-suite)
 - [CERN ROOT](#cern-root)
 - [Manim+ManimSlides](Manim+ManimSlides)
 - [G4bl and GEANT4 (Coming Soon)](#g4bl-and-geant4-coming-soon)
-
 
 ## Setup
 This is **not** a guide, just some note for my future reference.
 
 
 <details>
-<summary>Click here to find out more!</summary>
+<summary>If you already have a running docker just skip this... otherwise CLICK!</summary>
 
 ### Preparations
 
@@ -64,9 +61,9 @@ On your side run ```xhost +local``` and remember ```--volume /tmp/.X11-unix:/tmp
 </details>
 
 
+### Useful Commands
+You can find all the usual stuff running `docker -h`, but here are some important things:
 > [!TIP]
-> ### Useful Commands
-> You can find all the usual stuff running `docker -h`, but here are some important things:
 >
 > - Info on the memory usage of the different images/containers: `docker system df`
 > - Info on the images: `docker images -a`
@@ -110,8 +107,12 @@ To run jupyter just run ``` myjupyter ``` then open your browser and go to ```ht
 
 
 ## Manim + ManimSlides
+Manim is an animation engine for explanatory math videos. 
+It's used to create precise animations programmatically, as demonstrated in the videos of [3Blue1Brown](https://www.3blue1brown.com/).
+My docker is based on the version maintained by the [Manim Community](https://github.com/ManimCommunity), which is not associated with 3Blue1Brown.
 
-This Docker is not small because it comes with python, manim, manim slides and latex.
+This Docker is not small because it comes with python, manim, manim slides and Latex.
+
 Is everything necessary? I don't know yet and I will update it when I will figure it out!
 
 
