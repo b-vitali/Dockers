@@ -53,12 +53,15 @@ docker -v
 sudo docker run hello-world 
 ```
 
+</details>
 
 ### X11
-If you want to have plots and graphs you need to have X11 forwarding.
-On your side run ```xhost +local``` and remember ```--volume /tmp/.X11-unix:/tmp/.X11-unix``` when running docker
 
-</details>
+If you want to have plots and graphs you need to have X11 forwarding.
+
+> [!TIP]
+> On your side run ```xhost +local``` and remember ```--volume /tmp/.X11-unix:/tmp/.X11-unix```
+
 
 
 ### Useful Commands
