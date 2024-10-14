@@ -135,8 +135,13 @@ docker run -it --rm \
 
 To use this python package you call `manim [OPTIONS] MyFile.py`
 
-If you want to make a `Slides.html` you can run
-`manim-slide render MyFile.py Presentation` and then `manim-slide converter Presentation Slides.html`
+If you want to make a `ConvertExample.html` you can run
+
+`manim-slide render ConvertExample.py` and then 
+
+`manim-slide converter ConvertExample ConvertExample.html`
+
+This will create a presentation in html format to be open in most browsers
 
 </details>
 
