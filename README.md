@@ -106,6 +106,22 @@ If you want to run X-Suite via python you just import it and run `python3 MyFile
 
 To run jupyter just run ``` myjupyter ``` then open your browser and go to ```http://127.0.0.1:8888/tree/mnt/x-suite```
 
+
+In the last iteration i added `screen` and PS1 for them:
+```
+# How do you want to call the project
+RUN echo 'export CUSTOM_NAME="x-suite"' >> /home/user/.bashrc
+
+# Set the terminal title and PS1 with screen
+RUN echo 'echo -ne "\033]0;X-Suite\007"' >> /home/user/.bashrc
+RUN echo 'if [[ $STY ]]; then export PS1="\[\033[01;32m\]${CUSTOM_NAME}_$STY\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "; else export PS1="\[\033[01;32m\]${CUSTOM_NAME}\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "; fi' >> /home/user/.bashrc
+
+# Create .screenrc file and set bash as the shell for screen
+RUN echo "shell /bin/bash" >> /home/user/.screenrc
+RUN echo "source /home/user/.bashrc" >> /home/user/.screenrc
+```
+
+This is a bit confusing but the idea is to have a clean terminal.
 </details>
 
 
