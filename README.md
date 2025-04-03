@@ -77,6 +77,30 @@ You can find all the usual stuff running `docker -h`, but here are some importan
 >   - `docker rm <containerID>`
 
 
+## pyTorch
+PyTorch is an open-source deep learning framework. 
+It provides a flexible and dynamic computational graph, making it easy to build, train, and deploy machine learning models. 
+
+PyTorch is widely used for tasks such as computer vision, natural language processing, and reinforcement learning due to its intuitive design and robust ecosystem.
+
+<details>
+<summary>Build and use</summary>
+Standard build specifying the dockerfile name
+
+```docker build -t pytorch-docker -f pytorch_Dockerfile . ```
+
+
+```
+docker run -it --rm \
+    --name pytorch \
+    -p 8888:8888 \
+    --env DISPLAY=$DISPLAY \
+    --volume /tmp/.X11-unix:/tmp/.X11-unix \
+    --volume /home/bastiano/Software/pytorch-docker:/mnt/ \
+    pytorch-env 
+```
+</details>
+
 ## X-Suite
 As described on [x-suite website](https://xsuite.readthedocs.io/en/latest/):
 *Xsuite is a collection python packages for the simulation of the beam dynamics in particle accelerators.*
