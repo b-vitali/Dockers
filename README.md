@@ -3,6 +3,7 @@ This is just a handy collection of dockerfiles to create some dockers or useful 
 
 ## Table of content
 - [Setup](#setup)
+- [pyTorch](#pytorch)
 - [X-Suite](#x-suite)
 - [CERN ROOT](#cern-root)
 - [Manim+ManimSlides](Manim+ManimSlides)
@@ -78,10 +79,8 @@ You can find all the usual stuff running `docker -h`, but here are some importan
 
 
 ## pyTorch
-PyTorch is an open-source deep learning framework. 
-It provides a flexible and dynamic computational graph, making it easy to build, train, and deploy machine learning models. 
-
-PyTorch is widely used for tasks such as computer vision, natural language processing, and reinforcement learning due to its intuitive design and robust ecosystem.
+As described on the [website](https://pytorch.org/), *PyTorch is an optimized tensor library for deep learning using GPUs and CPUs*. It provides a flexible and dynamic computational graph, making it easy to build, train, and deploy machine learning models. 
+PyTorch is widely used for tasks such as computer vision, natural language processing, and reinforcement learning.
 
 <details>
 <summary>Build and use</summary>
