@@ -56,14 +56,38 @@ sudo docker run hello-world
 
 </details>
 
-### X11
+### Plot forwarding
 
-If you want to have plots and graphs you need to have X11 forwarding.
+If you want to have plots and graphs you need to have the proper forwarding.
 
-> [!TIP]
+> [!IMPORTANT] Linux
 > On your side run ```xhost +local``` and remember ```--volume /tmp/.X11-unix:/tmp/.X11-unix```
 
+> [!IMPORTANT] Windows
+> Yyou will need VcXsrv or Xming 
+> Run it creating `multi-windows` and set the `display number to 0`
 
+### Shortcuts
+
+You will probably have a long command to start the docker in the propre place with all the flags on. 
+We can make it simpler creating an 'alias' for the command
+
+> [!IMPORTANT] Linux
+> In your `.bashrc` create an `alias`
+> ```
+> alias run_pytorch='docker run -it --rm --name pytorch -p 8888:8888 --env DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix --volume local/path/to/files:/mnt/pytorch pytorch-docker' 
+> ```
+> This will create an `alias` you can run in the `terminal`
+
+> [!IMPORTANT] Windows
+> If you use `powershell` you can create a funcion in your `$PROFILE`, something like
+> ```
+> function run_pytorch {
+>   docker run -it --rm --name pytorch -p 8888:8888 --env DISPLAY=host.docker.internal:0 --volume local\path\to\files:/mnt/pytorch pytorch-docker
+> }
+> ```
+> This will create a function you can run in the powershell
+> NB: you need to add the `$PROFILE` to the `$PATH`
 
 ### Useful Commands
 You can find all the usual stuff running `docker -h`, but here are some important things:
@@ -95,9 +119,15 @@ docker run -it --rm \
     -p 8888:8888 \
     --env DISPLAY=$DISPLAY \
     --volume /tmp/.X11-unix:/tmp/.X11-unix \
-    --volume /home/bastiano/Software/pytorch-docker:/mnt/ \
-    pytorch-env 
+    --volume /home/bastiano/Software/pytorch-docker:/mnt/pytorch \
+    pytorch-docker 
 ```
+
+on Windows is siglty different
+```
+    docker run -it --rm --name pytorch -p 8888:8888 --env DISPLAY=host.docker.internal:0 --volume C:\Users\bastiano\Documents\ML_curveprediction:/mnt/pytorch pytorch-docker
+```
+
 </details>
 
 ## X-Suite
