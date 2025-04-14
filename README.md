@@ -61,9 +61,8 @@ sudo docker run hello-world
 If you want to have plots and graphs you need to have the proper forwarding.
 
 > [!IMPORTANT]
-> Linux:oOn your side run ```xhost +local``` and remember ```--volume /tmp/.X11-unix:/tmp/.X11-unix```
-
-> [!IMPORTANT] 
+> Linux: on your side run ```xhost +local``` and remember ```--volume /tmp/.X11-unix:/tmp/.X11-unix```
+>
 > Windows: you will need VcXsrv or Xming 
 > Run it creating `multi-windows` and set the `display number to 0`
 
@@ -78,8 +77,7 @@ We can make it simpler creating an 'alias' for the command
 > alias run_pytorch='docker run -it --rm --name pytorch -p 8888:8888 --env DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix --volume local/path/to/files:/mnt/pytorch pytorch-docker' 
 > ```
 > This will create an `alias` you can run in the `terminal`
-
-> [!IMPORTANT] 
+>
 > Windows: if you use `powershell` you can create a funcion in your `$PROFILE`, something like
 > ```
 > function run_pytorch {
