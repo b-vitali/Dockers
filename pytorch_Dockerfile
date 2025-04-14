@@ -44,7 +44,7 @@ RUN groupadd --gid ${GROUP_ID} usergroup \
 USER user
 
 # How do you want to call the project
-RUN echo 'export CUSTOM_NAME="pytorch-env"' >> /home/user/.bashrc
+RUN echo 'export CUSTOM_NAME="pytorch"' >> /home/user/.bashrc
 
 # Set the terminal title and PS1 with screen
 RUN echo 'echo -ne "\033]0;PyTorch\007"' >> /home/user/.bashrc
@@ -58,7 +58,7 @@ RUN echo "source /home/user/.bashrc" >> /home/user/.screenrc
 EXPOSE 8888
 
 # Set the working directory
-WORKDIR /mnt/pytorch-env
+WORKDIR /mnt/pytorch
 
 # Start a shell
 CMD ["/bin/bash"]
