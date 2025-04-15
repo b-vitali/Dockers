@@ -24,7 +24,7 @@ RUN pip3 install torch torchvision torchaudio --index-url https://download.pytor
 RUN pip3 install torch gpytorch
 
 # Install optional dependencies
-RUN pip3 install numpy scipy pandas scikit-learn tqdm cython h5py
+RUN pip3 install numpy scipy pandas scikit-learn tqdm cython h5py lmfit
 
 # Other useful packages
 RUN pip3 install ipympl ipython
