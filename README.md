@@ -3,7 +3,7 @@ This is just a handy collection of dockerfiles to create some dockers or useful 
 
 ## Table of content
 - [Setup](#setup)
-- [pyTorch](#pytorch)
+- [PyAll](#pyall)
 - [X-Suite](#x-suite)
 - [CERN ROOT](#cern-root)
 - [Manim+ManimSlides](Manim+ManimSlides)
@@ -74,14 +74,14 @@ We can make it simpler creating an 'alias' for the command
 > [!IMPORTANT] 
 > Linux: in your `.bashrc` create an `alias`
 > ```
-> alias run_pytorch='docker run -it --rm --name pytorch -p 8888:8888 --env DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix --volume local/path/to/files:/mnt/pytorch pytorch-docker' 
+> alias run_pyall='docker run -it --rm --name pyall -p 8888:8888 --env DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix --volume local/path/to/files:/mnt/pyall pyall-docker' 
 > ```
 > This will create an `alias` you can run in the `terminal`
 >
 > Windows: if you use `powershell` you can create a funcion in your `$PROFILE`, something like
 > ```
-> function run_pytorch {
->   docker run -it --rm --name pytorch -p 8888:8888 --env DISPLAY=host.docker.internal:0 --volume local\path\to\files:/mnt/pytorch pytorch-docker
+> function run_pyall {
+>   docker run -it --rm --name pyall -p 8888:8888 --env DISPLAY=host.docker.internal:0 --volume local\path\to\files:/mnt/pyall pyall-docker
 > }
 > ```
 > This will create a function you can run in the powershell
@@ -100,7 +100,11 @@ You can find all the usual stuff running `docker -h`, but here are some importan
 >   - `docker rm <containerID>`
 
 
-## pyTorch
+## PyAll
+This is an Ubuntu docker with a decent size python installation
+
+I added the scientific packages like `pandas` or `matplotlib` and also what is needed to run `pytoch`
+
 As described on the [website](https://pytorch.org/), *PyTorch is an optimized tensor library for deep learning using GPUs and CPUs*. It provides a flexible and dynamic computational graph, making it easy to build, train, and deploy machine learning models. 
 PyTorch is widely used for tasks such as computer vision, natural language processing, and reinforcement learning.
 
@@ -108,25 +112,37 @@ PyTorch is widely used for tasks such as computer vision, natural language proce
 <summary>Build and use</summary>
 Standard build specifying the dockerfile name
 
-```docker build -t pytorch-docker -f pytorch_Dockerfile . ```
-
+```docker build -t pyall-docker -f pyall_Dockerfile . ```
 
 ```
 docker run -it --rm \
-    --name pytorch \
+    --name pyall \
     -p 8888:8888 \
     --env DISPLAY=$DISPLAY \
     --volume /tmp/.X11-unix:/tmp/.X11-unix \
-    --volume /home/bastiano/Software/pytorch-docker:/mnt/pytorch \
-    pytorch-docker 
+    --volume /home/bastiano/Software/pyall-docker:/mnt/pyall \
+    pyall-docker 
 ```
 
 on Windows is siglty different
 ```
-    docker run -it --rm --name pytorch -p 8888:8888 --env DISPLAY=host.docker.internal:0 --volume C:\Users\bastiano\Documents\ML_curveprediction:/mnt/pytorch pytorch-docker
+    docker run -it --rm --name pyall -p 8888:8888 --env DISPLAY=host.docker.internal:0 --volume C:\Users\bastiano\Documents\ML_curveprediction:/mnt/pyall pyall-docker
 ```
 
 </details>
+
+### PyAll-GUI
+This second file is to extend the docker to use Qt5 GUI
+
+> [!IMPORTANT]
+>
+> You need the previous PyAll-docker to procede
+>
+
+To create this second docker with gui just run 
+```
+docker build -t pyall-gui-docker -f pyall_gui_Dockerfile.gui .
+```
 
 ## X-Suite
 As described on [x-suite website](https://xsuite.readthedocs.io/en/latest/):
