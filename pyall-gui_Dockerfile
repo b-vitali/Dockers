@@ -29,6 +29,19 @@ RUN pip3 install --no-cache-dir PyQt5==5.15.9 PyQt5-sip==12.11.0
 # Install stuff to run the ESSCavityManager
 RUN pip3 install qtawesome xlwt termcolor cryptography webdavclient3 cmislib python-pptx
 
+# Install sudo
+RUN apt-get update && apt-get install -y sudo \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+    
+# Add the user and group IDs dynamically
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+RUN groupadd --gid ${GROUP_ID} usergroup \
+    && useradd --uid ${USER_ID} --gid ${GROUP_ID} -m user \
+    && echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
 # Switch to the new user
 USER user
 

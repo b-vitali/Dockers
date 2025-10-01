@@ -1,0 +1,59 @@
+# Extend your pyall base image
+FROM ngsxfem/ngsolve:latest
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+
+USER root
+
+# Install h5py for saving and postprocessing
+RUN apt-get update && apt-get install -y python3-h5py
+
+# Install required x11 forwarding
+RUN apt-get install -y \ 
+    x11-apps \
+    python3-tk
+
+# Install additional stuff for netgen
+RUN apt-get update && apt-get install -y \
+    libgl1 \
+    libopengl0 \
+    libglu1-mesa \
+    libxrender1 \
+    libxext6 \
+    libsm6 \
+    libice6 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install sudo
+RUN apt-get update && apt-get install -y sudo \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Add the user without specifying a UID/GID
+RUN useradd -m user \
+    && echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Set HOME environment explicitly so that $HOME matches the created user
+ENV HOME=/home/user
+
+# Switch to the new user and set working directory
+USER user
+WORKDIR /mnt/pyquench-ngs
+
+# Ensure .bash_profile sources .bashrc (for login shells)
+RUN echo 'if [ -f ~/.bashrc ]; then source ~/.bashrc; fi' >> $HOME/.bash_profile
+
+# How do you want to call the project (export CUSTOM_NAME)
+RUN echo 'export CUSTOM_NAME="pyquench-ngs"' >> $HOME/.bashrc
+
+# Set the terminal title and PS1 with screen exactly as you wrote
+RUN echo 'echo -ne "\033]0;PyQuench-NGS\007"' >> $HOME/.bashrc
+RUN echo 'if [[ $STY ]]; then export PS1="\[\033[01;32m\]${CUSTOM_NAME}_$STY\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "; else export PS1="\[\033[01;32m\]${CUSTOM_NAME}\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "; fi' >> $HOME/.bashrc
+
+# Create .screenrc file and set bash as the shell for screen
+RUN echo "shell /bin/bash" >> $HOME/.screenrc
+RUN echo "source $HOME/.bashrc" >> $HOME/.screenrc
+
+# Default command (same as base)
+CMD ["bash", "-il"]
