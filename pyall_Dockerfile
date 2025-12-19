@@ -13,30 +13,42 @@ RUN apt-get update && apt-get install -y \
     x11-apps \
     git \
     libsqlite3-dev \
-    epiphany-browser \
+    sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# To read also XLS 
-RUN pip3 install openpyxl
+# Install pip packages
+RUN pip3 install --no-cache-dir \
+    openpyxl \
+    streamlit \
+    matplotlib 
 
-# Install Streamlit and matplotlib for plotting
-RUN pip3 install streamlit matplotlib
+RUN pip3 install --no-cache-dir \
+    torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu 
 
-# Expose Streamlit port (default: 8501)
-EXPOSE 8501
+RUN pip3 install --no-cache-dir \
+    gpytorch \
+    numpy \
+    scipy \
+    pandas \
+    scikit-learn \
+    tqdm \
+    cython \
+    h5py \
+    lmfit \
+    ipympl \
+    ipython 
 
-# Install PyTorch (CPU version by default, change if GPU is needed)
-RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+RUN pip3 install --no-cache-dir \
+    notebook \
+    jupyterlab 
 
-# For GaussiaProcess 
-RUN pip3 install torch gpytorch
-
-# Install optional dependencies
-RUN pip3 install numpy scipy pandas scikit-learn tqdm cython h5py lmfit
-
-# Other useful packages
-RUN pip3 install ipympl ipython
+RUN pip3 install --no-cache-dir \
+    mkdocs \
+    mkdocs-material \
+    mkdocs-macros-plugin \
+    pymdown-extensions \
+    mkdocstrings[python]
 
 # Set the display environment variable
 ENV DISPLAY=:0
@@ -52,10 +64,15 @@ RUN groupadd --gid ${GROUP_ID} usergroup \
 # Switch to the new user
 USER user
 
-# How do you want to call the project
+# Add alias to run Jupyter easily
+RUN echo "alias run_jupyter='jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=\"\" --NotebookApp.password=\"\"'" >> /home/user/.bashrc
+RUN echo "alias run_mkdocs_serve='mkdocs serve -a 0.0.0.0:8000'" >> /home/user/.bashrc
+RUN echo "alias run_mkdocs_build='mkdocs build'" >> /home/user/.bashrc
+
+# Set project name in shell
 RUN echo 'export CUSTOM_NAME="pyall"' >> /home/user/.bashrc
 
-# Set the terminal title and PS1 with screen
+# Set terminal title and prompt
 RUN echo 'echo -ne "\033]0;PyAll\007"' >> /home/user/.bashrc
 RUN echo 'if [[ $STY ]]; then export PS1="\[\033[01;32m\]${CUSTOM_NAME}_$STY\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "; else export PS1="\[\033[01;32m\]${CUSTOM_NAME}\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "; fi' >> /home/user/.bashrc
 
@@ -63,11 +80,13 @@ RUN echo 'if [[ $STY ]]; then export PS1="\[\033[01;32m\]${CUSTOM_NAME}_$STY\[\0
 RUN echo "shell /bin/bash" >> /home/user/.screenrc
 RUN echo "source /home/user/.bashrc" >> /home/user/.screenrc
 
-# Expose the Jupyter Notebook port
+# Expose Streamlit, Jupyter and mkdocs ports
+EXPOSE 8501
 EXPOSE 8888
+EXPOSE 8000
 
-# Set the working directory
+# Set working directory
 WORKDIR /mnt/pyall
 
-# Start a shell
+# Start bash by default
 CMD ["/bin/bash"]
